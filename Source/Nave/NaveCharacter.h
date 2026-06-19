@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "DecoratorMoverPersonaje.h" // Interfaz del Decorator
 #include "NaveCharacter.generated.h"
 
 class USpringArmComponent;
@@ -13,10 +14,13 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
+// Declaración adelantada de la base (Va fuera de la clase)
+class ADecoratorBase;
+
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
-UCLASS(config=Game)
-class ANaveCharacter : public ACharacter
+UCLASS(config = Game)
+class ANaveCharacter : public ACharacter, public IDecoratorMoverPersonaje // Herencia de la interfaz
 {
 	GENERATED_BODY()
 
@@ -27,7 +31,7 @@ class ANaveCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
-	
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
@@ -46,21 +50,18 @@ class ANaveCharacter : public ACharacter
 
 public:
 	ANaveCharacter();
-	
 
 protected:
-
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
 
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+
 	// To add mapping context
 	virtual void BeginPlay();
 
@@ -69,5 +70,8 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-};
 
+	// --- PATRÓN DECORATOR ---
+	// Implementamos la función de la interfaz
+	virtual float GetVelocidadActual() const override;
+};
