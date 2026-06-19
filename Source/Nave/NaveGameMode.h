@@ -13,6 +13,8 @@ class ANaveGameMode : public AGameModeBase
 
 public:
 	ANaveGameMode();
+protected:
+	virtual void BeginPlay() override;
 };
 
 

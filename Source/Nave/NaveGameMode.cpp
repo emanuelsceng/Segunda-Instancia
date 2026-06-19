@@ -2,6 +2,7 @@
 
 #include "NaveGameMode.h"
 #include "NaveCharacter.h"
+#include "FacadeMenuPrincipal.h"
 #include "UObject/ConstructorHelpers.h"
 
 ANaveGameMode::ANaveGameMode()
@@ -11,5 +12,18 @@ ANaveGameMode::ANaveGameMode()
 	if (PlayerPawnBPClass.Class != NULL)
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
+	}
+}
+void ANaveGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// El GameMode actúa como Cliente del Façade
+	AFacadeMenuPrincipal* MiFachada = GetWorld()->SpawnActor<AFacadeMenuPrincipal>(AFacadeMenuPrincipal::StaticClass());
+
+	if (MiFachada)
+	{
+		// Disparamos toda la orquestación
+		MiFachada->IniciarJuego();
 	}
 }
