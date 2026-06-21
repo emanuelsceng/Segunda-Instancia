@@ -1,15 +1,16 @@
 #include "FacadeMenuPrincipal.h"
 
-// Incluimos los 3 subsistemas que la fachada va a orquestar
-#include "FactoryFamiliaCubos.h"
+// Incluimos los subsistemas
 #include "GeneradorMuros.h"
 #include "GeneradorPinchos.h"
 #include "DirectorArquitectoJefe.h"
 #include "BuilderJefeGeometrico.h"
+// AÑADIDO: Incluimos tu Gestor de Oleadas
+#include "ObserverGestorOleadas.h" 
 
 AFacadeMenuPrincipal::AFacadeMenuPrincipal()
 {
-	PrimaryActorTick.bCanEverTick = false; // La fachada no necesita Tick
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void AFacadeMenuPrincipal::BeginPlay()
@@ -35,13 +36,9 @@ void AFacadeMenuPrincipal::IniciarJuego()
 		GenPinchos->FabricarObstaculo(FVector(900.f, 0.f, 50.f));
 	}
 
-	// 2. SUBSISTEMA ABSTRACT FACTORY (Poblando la primera oleada de enemigos)
-	AFactoryFamiliaCubos* FabCubos = GetWorld()->SpawnActor<AFactoryFamiliaCubos>(AFactoryFamiliaCubos::StaticClass());
-	if (FabCubos)
-	{
-		FabCubos->CrearSoldado(FVector(1000.f, 200.f, 50.f));
-		FabCubos->CrearElite(FVector(1000.f, -200.f, 50.f));
-	}
+	// 2. SUBSISTEMA OBSERVER (Le cedemos el control de los enemigos a tu Gestor)
+	// Eliminamos la llamada directa a las fábricas y spawneamos tu Observer
+	AObserverGestorOleadas* GestorOleadas = GetWorld()->SpawnActor<AObserverGestorOleadas>(AObserverGestorOleadas::StaticClass());
 
 	// 3. SUBSISTEMA BUILDER (Ensamblando al Jefe Gigante)
 	ADirectorArquitectoJefe* DirectorBoss = GetWorld()->SpawnActor<ADirectorArquitectoJefe>(ADirectorArquitectoJefe::StaticClass());

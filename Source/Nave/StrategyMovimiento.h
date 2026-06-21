@@ -1,15 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
-
 #include "CoreMinimal.h"
 
-/**
- * 
- */
 class NAVE_API StrategyMovimiento
 {
 public:
-	StrategyMovimiento();
-	~StrategyMovimiento();
+	virtual ~StrategyMovimiento() = default;
+	virtual void EjecutarMovimiento(class AActor* Contexto, float DeltaTime) = 0;
 };

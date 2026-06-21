@@ -1,15 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
+#include "InterfaceStateJefe.h"
 
-#include "CoreMinimal.h"
-
-/**
- * 
- */
-class NAVE_API StateJefeEnfurecido
+class NAVE_API StateJefeEnfurecido : public InterfaceStateJefe
 {
+private:
+	float TiempoEnfurecido = 0.0f;
 public:
-	StateJefeEnfurecido();
-	~StateJefeEnfurecido();
+	virtual void EjecutarComportamiento(class AActor* JefeContexto, float DeltaTime) override;
 };

@@ -1,15 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
-
 #include "CoreMinimal.h"
 
-/**
- * 
- */
 class NAVE_API InterfaceSuscriptor
 {
 public:
-	InterfaceSuscriptor();
-	~InterfaceSuscriptor();
+	virtual ~InterfaceSuscriptor() = default;
+	virtual void Actualizar(class AActor* EnemigoQueMurio) = 0;
 };

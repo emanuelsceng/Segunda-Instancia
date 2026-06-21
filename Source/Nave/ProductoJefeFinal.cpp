@@ -1,24 +1,51 @@
 #include "ProductoJefeFinal.h"
+#include "StateJefeInactivo.h" 
+#include "Materials/MaterialInstanceDynamic.h" // Para los colores
 
 AProductoJefeFinal::AProductoJefeFinal()
 {
-	// Activamos el Tick para que el Desarrollador 2 pueda darle movimiento
 	PrimaryActorTick.bCanEverTick = true;
 
 	MallaJefe = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MallaJefe"));
 	RootComponent = MallaJefe;
 	VelocidadMovimiento = 0.0f;
+
+	EstadoActual = nullptr;
 }
 
 void AProductoJefeFinal::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// COLOR: Morado (Jefe Final)
+	if (MallaJefe && MallaJefe->GetMaterial(0)) {
+		UMaterialInstanceDynamic* MaterialDinamico = UMaterialInstanceDynamic::Create(MallaJefe->GetMaterial(0), this);
+		if (MaterialDinamico) {
+			MaterialDinamico->SetVectorParameterValue(TEXT("Color"), FLinearColor(0.5f, 0.0f, 0.8f));
+			MallaJefe->SetMaterial(0, MaterialDinamico);
+		}
+	}
+
+	CambiarEstado(new StateJefeInactivo());
 }
 
 void AProductoJefeFinal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	// El Desarrollador 2 programará aquí adentro el patrón State
+
+	if (EstadoActual != nullptr)
+	{
+		EstadoActual->EjecutarComportamiento(this, DeltaTime);
+	}
+}
+
+void AProductoJefeFinal::CambiarEstado(InterfaceStateJefe* NuevoEstado)
+{
+	if (EstadoActual != nullptr)
+	{
+		delete EstadoActual;
+	}
+	EstadoActual = NuevoEstado;
 }
 
 void AProductoJefeFinal::SetMalla(UStaticMesh* Malla)
@@ -31,7 +58,6 @@ void AProductoJefeFinal::SetMalla(UStaticMesh* Malla)
 
 void AProductoJefeFinal::SetEscalaGigante()
 {
-	// Lo hacemos enorme para que sea innegable que es un Jefe
 	SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
 }
 

@@ -1,10 +1,8 @@
 #pragma once
 #include "InterfaceStateJefe.h"
 
-class NAVE_API StateJefeInactivo : public InterfaceStateJefe
+class NAVE_API StateJefeMuerto : public InterfaceStateJefe
 {
-private:
-	float TiempoEspera = 0.0f;
 public:
 	virtual void EjecutarComportamiento(class AActor* JefeContexto, float DeltaTime) override;
 };

@@ -1,15 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
+#include "InterfaceStateJefe.h"
 
-#include "CoreMinimal.h"
-
-/**
- * 
- */
-class NAVE_API StateJefePersiguiendo
+class NAVE_API StateJefePersiguiendo : public InterfaceStateJefe
 {
+private:
+	float TiempoPersiguiendo = 0.0f;
 public:
-	StateJefePersiguiendo();
-	~StateJefePersiguiendo();
+	virtual void EjecutarComportamiento(class AActor* JefeContexto, float DeltaTime) override;
 };

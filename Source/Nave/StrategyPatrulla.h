@@ -1,15 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
+#include "StrategyMovimiento.h"
 
-#include "CoreMinimal.h"
-
-/**
- * 
- */
-class NAVE_API StrategyPatrulla
+class NAVE_API StrategyPatrulla : public StrategyMovimiento
 {
 public:
-	StrategyPatrulla();
-	~StrategyPatrulla();
+	virtual void EjecutarMovimiento(class AActor* Contexto, float DeltaTime) override;
 };

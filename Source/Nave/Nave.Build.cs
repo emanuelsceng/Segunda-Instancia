@@ -6,8 +6,14 @@ public class Nave : ModuleRules
 {
 	public Nave(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
-	}
+        // Nuestro permiso para usar C++ puro (dynamic_cast) en el Patrón State
+        bUseRTTI = true;
+
+        // ARREGLO: Agregamos "EnhancedInput" al final de la lista de dependencias
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+
+        PrivateDependencyModuleNames.AddRange(new string[] { });
+    }
 }

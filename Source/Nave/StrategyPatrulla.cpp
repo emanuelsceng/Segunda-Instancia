@@ -1,12 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "StrategyPatrulla.h"
+#include "GameFramework/Actor.h"
 
-StrategyPatrulla::StrategyPatrulla()
+void StrategyPatrulla::EjecutarMovimiento(AActor* Contexto, float DeltaTime)
 {
-}
+	if (!Contexto) return;
 
-StrategyPatrulla::~StrategyPatrulla()
-{
+	// Patrulla simple de izquierda a derecha
+	FVector PosicionActual = Contexto->GetActorLocation();
+	PosicionActual.Y += FMath::Sin(Contexto->GetWorld()->GetTimeSeconds() * 3.0f) * 15.0f;
+	Contexto->SetActorLocation(PosicionActual);
 }

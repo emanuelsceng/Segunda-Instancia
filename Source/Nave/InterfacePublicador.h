@@ -1,15 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
-
 #include "CoreMinimal.h"
 
-/**
- * 
- */
 class NAVE_API InterfacePublicador
 {
 public:
-	InterfacePublicador();
-	~InterfacePublicador();
+	virtual ~InterfacePublicador() = default;
+	virtual void Suscribir(class InterfaceSuscriptor* Suscriptor) = 0;
+	virtual void Desuscribir(class InterfaceSuscriptor* Suscriptor) = 0;
+	virtual void NotificarMuerte() = 0;
 };
