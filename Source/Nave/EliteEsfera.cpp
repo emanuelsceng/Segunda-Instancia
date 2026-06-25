@@ -11,24 +11,17 @@ AEliteEsfera::AEliteEsfera() {
 	RootComponent = MallaCuerpo;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> FormaEsfera(TEXT("/Engine/BasicShapes/Sphere.Sphere"));
 	if (FormaEsfera.Succeeded()) { MallaCuerpo->SetStaticMesh(FormaEsfera.Object); }
-
+	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialBase(TEXT("/Game/M_ColorEnemigo.M_ColorEnemigo"));
+	if (MaterialBase.Succeeded()) { MallaCuerpo->SetMaterial(0, MaterialBase.Object); }
 	SetActorScale3D(FVector(1.5f, 1.5f, 1.5f));
 }
 
 void AEliteEsfera::BeginPlay() {
 	Super::BeginPlay();
 
-	// COLOR: Rojo (Élite)
-	if (MallaCuerpo && MallaCuerpo->GetMaterial(0)) {
-		UMaterialInstanceDynamic* MaterialDinamico = UMaterialInstanceDynamic::Create(MallaCuerpo->GetMaterial(0), this);
-		if (MaterialDinamico) {
-			MaterialDinamico->SetVectorParameterValue(TEXT("Color"), FLinearColor::Red);
-			MallaCuerpo->SetMaterial(0, MaterialDinamico);
-		}
-	}
-
 	CambiarEstrategia(new StrategyPatrulla());
 	GetWorld()->GetTimerManager().SetTimer(TimerCambioEstrategia, this, &AEliteEsfera::ActivarPersecucion, 5.0f, false);
+	HabilidadDeElite();
 }
 
 void AEliteEsfera::Tick(float DeltaTime) {
@@ -52,4 +45,17 @@ void AEliteEsfera::Destroyed() {
 	Super::Destroyed();
 }
 
-void AEliteEsfera::HabilidadDeElite() {}
+void AEliteEsfera::HabilidadDeElite()
+{
+	// Esfera gigante destructora
+	SetActorScale3D(FVector(2.5f, 2.5f, 2.5f));
+
+	// Color de Élite (Naranja)
+	if (MallaCuerpo && MallaCuerpo->GetMaterial(0)) {
+		UMaterialInstanceDynamic* MaterialDinamico = UMaterialInstanceDynamic::Create(MallaCuerpo->GetMaterial(0), this);
+		if (MaterialDinamico) {
+			MaterialDinamico->SetVectorParameterValue(TEXT("Color"), FLinearColor::Yellow); // Naranja
+			MallaCuerpo->SetMaterial(0, MaterialDinamico);
+		}
+	}
+}

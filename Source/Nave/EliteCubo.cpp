@@ -11,24 +11,17 @@ AEliteCubo::AEliteCubo() {
 	RootComponent = MallaCuerpo;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> FormaCubo(TEXT("/Engine/BasicShapes/Cube.Cube"));
 	if (FormaCubo.Succeeded()) { MallaCuerpo->SetStaticMesh(FormaCubo.Object); }
-
+	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialBase(TEXT("/Game/M_ColorEnemigo.M_ColorEnemigo"));
+	if (MaterialBase.Succeeded()) { MallaCuerpo->SetMaterial(0, MaterialBase.Object); }
 	SetActorScale3D(FVector(1.5f, 1.5f, 1.5f));
 }
 
 void AEliteCubo::BeginPlay() {
 	Super::BeginPlay();
 
-	// COLOR: Rojo (Élite)
-	if (MallaCuerpo && MallaCuerpo->GetMaterial(0)) {
-		UMaterialInstanceDynamic* MaterialDinamico = UMaterialInstanceDynamic::Create(MallaCuerpo->GetMaterial(0), this);
-		if (MaterialDinamico) {
-			MaterialDinamico->SetVectorParameterValue(TEXT("Color"), FLinearColor::Red);
-			MallaCuerpo->SetMaterial(0, MaterialDinamico);
-		}
-	}
-
 	CambiarEstrategia(new StrategyPatrulla());
 	GetWorld()->GetTimerManager().SetTimer(TimerCambioEstrategia, this, &AEliteCubo::ActivarPersecucion, 5.0f, false);
+	HabilidadDeElite();
 }
 
 void AEliteCubo::Tick(float DeltaTime) {
@@ -52,4 +45,17 @@ void AEliteCubo::Destroyed() {
 	Super::Destroyed();
 }
 
-void AEliteCubo::HabilidadDeElite() {}
+void AEliteCubo::HabilidadDeElite()
+{
+	// 1. Modificamos la escala (Unidad Pesada Tanque - ¡GIGANTE!)
+	SetActorScale3D(FVector(2.5f, 2.5f, 2.5f));
+
+	// 2. Le ponemos su uniforme de Élite (Morado/Rojo)
+	if (MallaCuerpo && MallaCuerpo->GetMaterial(0)) {
+		UMaterialInstanceDynamic* MaterialDinamico = UMaterialInstanceDynamic::Create(MallaCuerpo->GetMaterial(0), this);
+		if (MaterialDinamico) {
+			MaterialDinamico->SetVectorParameterValue(TEXT("Color"), FLinearColor::Red); // O Purple
+			MallaCuerpo->SetMaterial(0, MaterialDinamico);
+		}
+	}
+}

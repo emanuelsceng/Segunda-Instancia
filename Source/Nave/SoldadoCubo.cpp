@@ -11,22 +11,16 @@ ASoldadoCubo::ASoldadoCubo() {
 	RootComponent = MallaCuerpo;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> FormaCubo(TEXT("/Engine/BasicShapes/Cube.Cube"));
 	if (FormaCubo.Succeeded()) { MallaCuerpo->SetStaticMesh(FormaCubo.Object); }
+	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialBase(TEXT("/Game/M_ColorEnemigo.M_ColorEnemigo"));
+	if (MaterialBase.Succeeded()) { MallaCuerpo->SetMaterial(0, MaterialBase.Object); }
 }
 
 void ASoldadoCubo::BeginPlay() {
 	Super::BeginPlay();
 
-	// COLOR: Azul (Soldado Común)
-	if (MallaCuerpo && MallaCuerpo->GetMaterial(0)) {
-		UMaterialInstanceDynamic* MaterialDinamico = UMaterialInstanceDynamic::Create(MallaCuerpo->GetMaterial(0), this);
-		if (MaterialDinamico) {
-			MaterialDinamico->SetVectorParameterValue(TEXT("Color"), FLinearColor::Blue);
-			MallaCuerpo->SetMaterial(0, MaterialDinamico);
-		}
-	}
-
 	CambiarEstrategia(new StrategyPatrulla());
 	GetWorld()->GetTimerManager().SetTimer(TimerCambioEstrategia, this, &ASoldadoCubo::ActivarPersecucion, 5.0f, false);
+	TareaDeSoldado();
 }
 
 void ASoldadoCubo::Tick(float DeltaTime) {
@@ -50,4 +44,17 @@ void ASoldadoCubo::Destroyed() {
 	Super::Destroyed();
 }
 
-void ASoldadoCubo::TareaDeSoldado() {}
+void ASoldadoCubo::TareaDeSoldado()
+{
+	// 1. Modificamos la escala (Unidad Ligera de Enjambre)
+	SetActorScale3D(FVector(0.6f, 0.6f, 0.6f));
+
+	// 2. Le ponemos su uniforme táctico (Azul)
+	if (MallaCuerpo && MallaCuerpo->GetMaterial(0)) {
+		UMaterialInstanceDynamic* MaterialDinamico = UMaterialInstanceDynamic::Create(MallaCuerpo->GetMaterial(0), this);
+		if (MaterialDinamico) {
+			MaterialDinamico->SetVectorParameterValue(TEXT("Color"), FLinearColor::Blue);
+			MallaCuerpo->SetMaterial(0, MaterialDinamico);
+		}
+	}
+}

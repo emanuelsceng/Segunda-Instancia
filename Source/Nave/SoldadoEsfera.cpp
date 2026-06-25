@@ -11,22 +11,16 @@ ASoldadoEsfera::ASoldadoEsfera() {
 	RootComponent = MallaCuerpo;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> FormaEsfera(TEXT("/Engine/BasicShapes/Sphere.Sphere"));
 	if (FormaEsfera.Succeeded()) { MallaCuerpo->SetStaticMesh(FormaEsfera.Object); }
+	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialBase(TEXT("/Game/M_ColorEnemigo.M_ColorEnemigo"));
+	if (MaterialBase.Succeeded()) { MallaCuerpo->SetMaterial(0, MaterialBase.Object); }
 }
 
 void ASoldadoEsfera::BeginPlay() {
 	Super::BeginPlay();
 
-	// COLOR: Azul (Soldado Común)
-	if (MallaCuerpo && MallaCuerpo->GetMaterial(0)) {
-		UMaterialInstanceDynamic* MaterialDinamico = UMaterialInstanceDynamic::Create(MallaCuerpo->GetMaterial(0), this);
-		if (MaterialDinamico) {
-			MaterialDinamico->SetVectorParameterValue(TEXT("Color"), FLinearColor::Blue);
-			MallaCuerpo->SetMaterial(0, MaterialDinamico);
-		}
-	}
-
 	CambiarEstrategia(new StrategyPatrulla());
 	GetWorld()->GetTimerManager().SetTimer(TimerCambioEstrategia, this, &ASoldadoEsfera::ActivarPersecucion, 5.0f, false);
+	TareaDeSoldado();
 }
 
 void ASoldadoEsfera::Tick(float DeltaTime) {
@@ -50,4 +44,17 @@ void ASoldadoEsfera::Destroyed() {
 	Super::Destroyed();
 }
 
-void ASoldadoEsfera::TareaDeSoldado() {}
+void ASoldadoEsfera::TareaDeSoldado()
+{
+	// Esfera ligera
+	SetActorScale3D(FVector(0.6f, 0.6f, 0.6f));
+
+	// Color de soldado (Cian)
+	if (MallaCuerpo && MallaCuerpo->GetMaterial(0)) {
+		UMaterialInstanceDynamic* MaterialDinamico = UMaterialInstanceDynamic::Create(MallaCuerpo->GetMaterial(0), this);
+		if (MaterialDinamico) {
+			MaterialDinamico->SetVectorParameterValue(TEXT("Color"), FLinearColor::Blue);
+			MallaCuerpo->SetMaterial(0, MaterialDinamico);
+		}
+	}
+}

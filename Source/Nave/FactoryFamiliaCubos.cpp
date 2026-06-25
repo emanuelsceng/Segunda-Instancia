@@ -4,7 +4,7 @@
 
 AFactoryFamiliaCubos::AFactoryFamiliaCubos()
 {
-	PrimaryActorTick.bCanEverTick = false; // Las fábricas no necesitan Tick
+	PrimaryActorTick.bCanEverTick = false; 
 }
 
 AActor* AFactoryFamiliaCubos::CrearSoldado(FVector Ubicacion)

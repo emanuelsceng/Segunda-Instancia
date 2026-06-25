@@ -10,6 +10,6 @@ AObstaculoPincho::AObstaculoPincho()
 		MallaObstaculo->SetStaticMesh(MallaCono.Object);
 	}
 
-	// Escala del pincho (Más alto y un poco más ancho en la base)
+	
 	SetActorScale3D(FVector(1.5f, 1.5f, 2.0f));
 }

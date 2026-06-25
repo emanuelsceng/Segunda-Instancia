@@ -4,7 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "ObstaculoBase.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class NAVE_API AObstaculoBase : public AActor
 {
 	GENERATED_BODY()

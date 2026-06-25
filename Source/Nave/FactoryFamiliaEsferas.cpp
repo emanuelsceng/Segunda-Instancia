@@ -4,7 +4,7 @@
 
 AFactoryFamiliaEsferas::AFactoryFamiliaEsferas()
 {
-	PrimaryActorTick.bCanEverTick = false; // Las fábricas abstractas no necesitan actualizarse por frame
+	PrimaryActorTick.bCanEverTick = false; 
 }
 
 AActor* AFactoryFamiliaEsferas::CrearSoldado(FVector Ubicacion)
